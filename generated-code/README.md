@@ -2,9 +2,13 @@
 
 ## required
 
-* [protoc](https://grpc.io/docs/protoc-installation/ "protoc")
+- [protoc](https://grpc.io/docs/protoc-installation/ "protoc")
 
 https://grpc.io/docs/protoc-installation/
+
+## demo
+
+https://thirosue.github.io/protocol-buffers-javascript-sample/generated-code/
 
 ## sample proto
 
@@ -27,6 +31,9 @@ $ /path/to/directory/protocol-buffers-javascript-sample/generated-code
 $ protoc --proto_path=. --js_out=import_style=commonjs,binary:. person.proto
 ```
 
+## build
 
-
-
+```
+$ yarn
+$ yarn build
+```
