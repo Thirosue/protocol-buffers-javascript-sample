@@ -18,9 +18,7 @@ jobs:
 
       - run: node -v
       - run: yarn -v
-      - run: cd generated-code
-      - run: yarn
-      - run: yarn build
+      - run: cd generated-code && yarn && yarn build
 
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
