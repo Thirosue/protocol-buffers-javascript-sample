@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta charset="utf-8" />
+    <title></title>
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="" />
+    <link rel="shortcut icon" href="" />
+  </head>
+  <body>
+    <h4>payload</h4>
+    <div id="payload"></div>
+    <h4>to Text</h4>
+    <div id="string"></div>
+    <h4>to Base64</h4>
+    <div id="base64"></div>
+    <h4>to Object</h4>
+    <div id="object"></div>
+    <!-- SCRIPTS -->
+
+    <script src="https://cdn.jsdelivr.net/npm/protobufjs@6.10.1/dist/protobuf.min.js"></script>
+    <script>
+      protobuf.load("person.proto", function (err, root) {
+        if (err) throw err;
+
+        // Obtain a message type
+        var Person = root.lookupType("person.Person");
+
+        // Exemplary payload
+        var payload = {
+          name: "john doe",
+          id: 99,
+          email: "test@example.com",
+        };
+        document.querySelector("#payload").textContent = JSON.stringify(
+          payload
+        );
+
+        // Verify the payload if necessary (i.e. when possibly incomplete or invalid)
+        var errMsg = Person.verify(payload);
+        if (errMsg) throw Error(errMsg);
+
+        // Create a new message
+        var person = Person.create(payload); // or use .fromObject if conversion is necessary
+
+        // Encode a message to an Uint8Array (browser) or Buffer (node)
+        var buffer = Person.encode(person).finish();
+        console.log(buffer);
+        document.querySelector(
+          "#string"
+        ).textContent = new TextDecoder().decode(buffer); //to text
+
+        document.querySelector("#base64").textContent = btoa(
+          String.fromCharCode(...buffer)
+        ); //to base64
+        // ... do something with buffer
+
+        // Decode an Uint8Array (browser) or Buffer (node) to a message
+        var person = Person.decode(buffer);
+        console.log(person);
+        // ... do something with message
+
+        // If the application uses length-delimited buffers, there is also encodeDelimited and decodeDelimited.
+
+        // Maybe convert the message back to a plain object
+        var object = Person.toObject(person, {
+          longs: String,
+          enums: String,
+          bytes: String,
+          // see ConversionOptions
+        });
+        document.querySelector("#object").textContent = JSON.stringify(object);
+      });
+    </script>
+  </body>
+</html>
